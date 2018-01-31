@@ -1,0 +1,348 @@
+	<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+  		<link rel="stylesheet" href="jquery/jquery.mobile-1.4.5.min.css" />
+  		<link rel="stylesheet" href="jquery/bootstrap.min.css">
+  		<link rel="stylesheet" href="jquery/jquery.dataTables.min.css">
+  		
+  		<script src="jquery/jquery-1.11.2.min.js"></script>
+  		<script src="jquery/jquery.mobile-1.4.5.min.js"></script>
+  		<script src="jquery/bootstrap.min.js"></script>
+  		 <script src="jquery/numeral.min.js"></script>
+  		  		  
+		<title>Perhitungan Kredit Komite</title>
+		<script type="text/javascript">
+		
+		$(document).ready(function(){
+			$("#passet").hide();
+			});
+			
+		$(document).ready(function(){
+			$("#tabcalc").click(function(){
+				$("#pcalc").show();
+				$("#passet").hide();
+			})
+			$("#tabasset").click(function(){
+				$("#pcalc").hide();
+				$("#passet").show();
+			})
+		});
+		
+		
+		
+			$(document).ready(function(){
+			
+				dta = {"tset":[{"tnr":9,"adm":600000,"rte":59.5,"lfins":4500,"asurn":0.018},
+							   {"tnr":12,"adm":600000,"rte":59.5,"lfins":6000,"asurn":0.018},
+							   {"tnr":15,"adm":600000,"rte":59.5,"lfins":7500,"asurn":0.0257},
+							   {"tnr":18,"adm":600000,"rte":59.5,"lfins":9000,"asurn":0.0257},
+							   {"tnr":20,"adm":650000,"rte":59.5,"lfins":10000,"asurn":0.0333},
+							   {"tnr":21,"adm":650000,"rte":59.5,"lfins":10500,"asurn":0.0333}
+								]};
+				$("#btnj").click(function(){
+					var h = $('input:radio[name=tnr]:checked').val();
+					
+					$("#hk").val(dta.tset[h].lfins);
+					
+				});	
+				
+				$("#btnHitung").click(function(){
+					 var h = $('input:radio[name=tnr]:checked').val();
+					 var tnr = dta.tset[h].tnr;
+					 var adm = dta.tset[h].adm;
+					 var rte = dta.tset[h].rte;
+					 var lfins = dta.tset[h].lfins;
+					 var asurn = dta.tset[h].asurn;
+					 var j = $("#pj").val();
+					 var pj = parseInt(j);
+					 var k = $("#hk").val();
+					 var hk = parseInt(k);
+					 var ng = $("#peng").val();
+					 var peng = parseInt(ng);
+					 
+					 if(pj>=12000000){
+					 	adm = 950000;
+					 }else if(pj>=9000000){
+					 	adm = 850000;
+					 }else if(pj>=7000000){
+					  	adm = 750000;
+					  }
+					 
+					 var np = pj+adm;
+	                 var um = hk - np;
+	                 var ins = (asurn * np) + lfins;
+	                 var ntf = Math.round((np + ins));
+	                 var n1 = ((pj+adm)*asurn)+lfins;                
+	                
+	                 var trep  = rte/1200;
+	                 var n2 = ntf * trep/(1-(Math.pow(1/(1 + trep),tnr))); 
+	                 //var nn2 = n2;         
+	             	
+	                 var rund = Math.round(n2);	
+	             	 var runddown = rund/1000;
+	            	 var rund2 = Math.ceil(runddown);
+	            	 //var rund2 = Math.round(runddown);
+	            	 var angs = rund2 * 1000;
+	            	
+	                
+					 var dsr = (angs/peng)*100; 
+					 var tp = tnr*angs;
+					 var bp = tp-ntf;        
+					 var ump = (um/hk); 
+					 var asurnn = Math.round((asurn*np)+lfins);
+					 
+					 
+					 var adma = numeral(adm).format('0,0');
+					 var jj = numeral(j).format('0,0');
+					 var ds = numeral(dsr.toFixed(2)/100).format('0.00%');
+					 var angsa = numeral(angs).format('0,0');
+					 var uma = numeral(um).format('0,0');
+					 var umpa = numeral(ump).format('0.00%');
+					 var ntfa = numeral(ntf).format('0,0');
+					 var asurnna = numeral(asurnn).format('0,0');
+					 
+
+					 $("#txttnr").html(tnr);
+					 $("#txtadm").html(adma);
+					 $("#txtum").html(uma);
+					 $("#txtump").html(umpa);
+					 $("#txtangs").html(angsa);
+					 $("#txtdsr").html(ds);
+					 $("#txtntf").html(ntfa);
+					 $("#txtasurnn").html(asurnna);
+					 $("#txtj").html(jj);
+					 
+
+				});	
+				
+			});
+			
+			$(document).ready(function(){
+				$("#resetbtn").click(function(){
+					$("#pj").val("");
+					$("#hk").val("");
+					$("#peng").val("");
+				});
+				
+			});
+			  	
+		</script>
+	</head>
+	<body>
+	
+	<div data-role="page">
+	 <div data-role="header" data-position="fixed">
+        <h1>Perhitungan</h1>
+        <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
+        <a href="#add-form" data-icon="gear" data-iconpos="notext">Add</a>
+    </div><!-- /header -->
+    <div data-role="panel" data-position-fixed="true" data-display="push" data-theme="b" id="nav-panel">
+        <ul data-role="listview">
+            <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                 <li data-rel="close"><div class="ui-input-btn ui-btn ui-inline">Calculate<input data-enhanced="true" value="Enhanced" type="button" id="tabcalc"></div></li>
+                <li data-rel="close"><div class="ui-input-btn ui-btn ui-inline">Cari Asset<input data-enhanced="true" value="Enhanced" type="button" id="tabasset"></div></li>
+                
+        </ul>
+    </div><!-- /panel -->
+    
+		<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+        <h5 class="modal-title" align="center">__________________</h5>
+      	
+		<div class="modal-body">
+		<div class="container">
+		
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">Tenor :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txttnr"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">Pinjaman :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtj"></p></div></div>
+		 </div>
+		 <div class="ui-grid-b">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">DP :</div></div>
+	     <div class="ui-block-b" align="center"><div class="ui-bar" style="height:40px"><p id="txtum"></p></div></div>
+	     <div class="ui-block-c" align="right"><div class="ui-bar" style="height:40px"><p id="txtump"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">Angsuran :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtangs"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">DSR :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtdsr"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">NTF :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtntf"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">Admin :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtadm"></p></div></div>
+		 </div>
+		 <div class="ui-grid-a">
+	     <div class="ui-block-a" align="left"><div class="ui-bar" style="height:40px">Premi :</div></div>
+	     <div class="ui-block-b" align="right"><div class="ui-bar" style="height:40px"><p id="txtasurnn"></p></div></div>
+		 </div>
+		
+		 
+		 </div>
+		 </div>
+		 <div class="modal-footer">
+		 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		 
+		 </div>
+		 </div>
+		 </div>
+		 </div>
+		 
+		 <div data-role="content" id="pcalc"> 
+		 <br/>
+		 <form>
+		
+		<input type="number" id="pj" name="PJ" placeholder="Jumlah Pinjaman" pattern="[0-9]*">
+		<input type="number" id="hk" name="HK" placeholder="OTR" pattern="[0-9]*">
+		<input type="number" id="peng" name="peng" placeholder="Penghasilan" pattern="[0-9]*">
+	
+		<div align="center">		
+			<fieldset data-role="controlgroup" data-type="horizontal">
+				
+			     	<input type="radio" name="tnr" id="radio-choice-1" value="0" checked="checked" />
+			     	<label for="radio-choice-1">9</label>
+
+			     	<input type="radio" name="tnr" id="radio-choice-2" value="1"  />
+			     	<label for="radio-choice-2">12</label>
+
+			     	<input type="radio" name="tnr" id="radio-choice-3" value="2"  />
+			     	<label for="radio-choice-3">15</label>
+
+			     	<input type="radio" name="tnr" id="radio-choice-4" value="3"  />
+			     	<label for="radio-choice-4">18</label>
+			     	
+			     	<input type="radio" name="tnr" id="radio-choice-5" value="4"  />
+			     	<label for="radio-choice-5">20</label>
+			     	
+			     	<input type="radio" name="tnr" id="radio-choice-6" value="5"  />
+			     	<label for="radio-choice-6">21</label>
+			</fieldset>
+		</div><hr/>
+		<button type="button" id="btnHitung" data-toggle="modal" data-target=".bs-example-modal-sm">Calculation</button>
+		<button type="reset" value="Reset" id="resetbtn">Reset</button>
+		<!-- <input type="button" id="btnj" value="hitungjquery" ><br/> -->
+		<hr/>
+		</form>
+		</div>
+		
+		<!-- page asset -->
+		<div data-role="content" id="passet"> 
+     <!--<input type="search" class="form-control" id="merk"> -->
+     <div class="form-group">
+   
+    <select class="form-control" id="merk">
+      <option>HONDA</option>
+      <option>YAMAHA</option>
+      <option>SUZUKI</option>
+      <option>KAWASAKI</option>
+    </select>
+    
+    
+    <select class="form-control" id="thn">
+      <option>2009</option>
+      <option>2010</option>
+      <option>2011</option>
+      <option>2012</option>
+      <option>2013</option>
+      <option>2014</option>
+      <option>2015</option>
+      <option>2016</option>
+      <option>2017</option>
+    </select>
+   
+     <input type="search" class="form-control" id="search" placeholder="masukan code asset">
+     </div>
+     <button type="button" class="btn btn-secondary btn-lg btn-block" id="btnsearch">Cari Asset</button>
+      
+ <div data-role="page" id="dtbdiv" data-theme="a">     
+      <font size="2"> 
+     <table class="table table-striped table-bordered table-hover" id="tbotr">
+     	<thead>
+     		<tr>			
+     			<th>CodeAsset</th>
+     			<th>Otr</th>
+     			<th>Tahun</th>
+     		</tr>
+     	</thead>
+     	<tbody>		
+     	</tbody>
+     </table>
+ </div>
+ <script>
+ 
+ 
+
+   $(document).ready(function(){
+   $("#btnsearch").click(function(){
+   	$.getJSON("jquery/codeasset.json",function(data){
+   		var vs = $("#search").val();
+   		var vss = $("#thn").val();
+   		var vsss = $("#merk").val();
+   		var zz = 0;
+   		var regex = new RegExp(vs, 'i');
+   		var regexa = new RegExp(vss, 'i');
+   		var regexb = new RegExp(vsss, 'i');
+   		var regzz = new RegExp(zz, 'i');
+   		var output = "";
+   		$.each(data, function(key, val){
+   			 if((val.otr.search(regzz) != zz)&&(val.code.search(regex) != -1)&&(val.tahun.search(regexa) != -1)&&(val.merk.search(regexb) != -1)){
+   				output += '<tr>';
+   				//output += '<td>'+val.id+'</td>';
+   				//output += '<td>'+val.merk+'</td>';
+   				output += '<td>'+val.code+'</td>';
+   				output += '<td>'+val.otr+'</td>';
+   				output += '<td>'+val.tahun+'</td>';
+   				//output += '<td>'+val.codeas+'</td>';
+   				output += '</tr>';
+   				}
+   		});
+   		$('tbody').html(output);
+   		});
+   	});
+   	
+   })
+  
+  
+  	$(document).on("pageshow", "#dtbdiv", function() {
+		
+		if ($.fn.DataTable.isDataTable( '#tbotr' )) {
+			$('#tbotr').DataTable().columns.adjust();
+			return;
+		}
+		
+		$('#tbotr').dataTable( {
+			"scrollX": true,
+			"scrollXollapse": true,
+			"ajax": 'jquery/codeasset.json',
+			"pagingType": "full"
+		} );
+	} );
+	
+	$(document).on( "pageremove", function( event ) { $('#tbotr').DataTable().destroy(false); } )
+	
+
+ </script>
+ </font>
+  </div>
+		
+		
+		<div data-role="footer" align="center">
+      2018&copy; Adi Nugraha, S.kom
+    </div>
+		</div>
+		
+	</body>
+</html>
