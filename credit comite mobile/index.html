@@ -314,25 +314,6 @@
    	});
    	
    })
-  
-  
-  	$(document).on("pageshow", "#dtbdiv", function() {
-		
-		if ($.fn.DataTable.isDataTable( '#tbotr' )) {
-			$('#tbotr').DataTable().columns.adjust();
-			return;
-		}
-		
-		$('#tbotr').dataTable( {
-			"scrollX": true,
-			"scrollXollapse": true,
-			"ajax": 'jquery/codeasset.json',
-			"pagingType": "full"
-		} );
-	} );
-	
-	$(document).on( "pageremove", function( event ) { $('#tbotr').DataTable().destroy(false); } )
-	
 
  </script>
  </font>
